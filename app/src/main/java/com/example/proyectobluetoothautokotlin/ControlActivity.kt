@@ -8,6 +8,8 @@ import android.os.AsyncTask
 import android.os.Bundle
 
 import android.util.Log
+import android.view.MotionEvent
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.control_layout.*
 import java.io.IOException
@@ -31,10 +33,63 @@ class ControlActivity: AppCompatActivity(){
         m_address = intent.getStringExtra(MainActivity.EXTRA_ADDRESS)
 
         ConnectToDevice(this).execute()
-        imageButton.setOnClickListener{ sendCommand("1") }
-        imageButton2.setOnClickListener { sendCommand("2") }
-        imageButton3.setOnClickListener { sendCommand("3") }
-        imageButton4.setOnClickListener{ sendCommand("0") }
+
+        imageButton.setOnTouchListener(object: View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                when(event?.action){
+                    MotionEvent.ACTION_DOWN -> sendCommand("1")
+                }
+                return v?.onTouchEvent(event)?:true
+            }
+        })
+
+/*
+        imageButton.setOnLongClickListener{
+            sendCommand("1")
+            true
+        }
+
+ */
+        imageButton2.setOnTouchListener(object: View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                when(event?.action){
+                    MotionEvent.ACTION_DOWN -> sendCommand("2")
+                }
+                return v?.onTouchEvent(event)?:true
+            }
+        })
+
+        imageButton3.setOnTouchListener(object: View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                when(event?.action){
+                    MotionEvent.ACTION_DOWN -> sendCommand("3")
+                }
+                return v?.onTouchEvent(event)?:true
+            }
+        })
+
+        imageButton4.setOnTouchListener(object: View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                when(event?.action){
+                    MotionEvent.ACTION_DOWN -> sendCommand("0")
+                }
+                return v?.onTouchEvent(event)?:true
+            }
+        })
+
+        /*
+        imageButton2.setOnLongClickListener {
+            sendCommand("2")
+            true
+        }
+        imageButton3.setOnLongClickListener {
+            sendCommand("3")
+            true
+        }
+        imageButton4.setOnLongClickListener{
+            sendCommand("0")
+            true
+        }*/
         control_disconnect.setOnClickListener{ disconnect() }
     }
     private fun sendCommand(input: String){
