@@ -1,4 +1,5 @@
 package com.example.proyectobluetoothautokotlin
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
@@ -6,10 +7,12 @@ import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
 
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.control_layout.*
 import java.io.IOException
@@ -27,6 +30,10 @@ class ControlActivity: AppCompatActivity(){
         lateinit var m_address: String
     }
 
+    private var number=0;
+    private lateinit var mHandler: Handler
+    private lateinit var mRunnable:Runnable
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.control_layout)
@@ -34,10 +41,16 @@ class ControlActivity: AppCompatActivity(){
 
         ConnectToDevice(this).execute()
 
+        mHandler=Handler()
+        buttonPress()
+
+        /*
         imageButton.setOnTouchListener(object: View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 when(event?.action){
-                    MotionEvent.ACTION_DOWN -> sendCommand("1")
+                    MotionEvent.ACTION_DOWN ->
+
+                    sendCommand("1")
                 }
                 return v?.onTouchEvent(event)?:true
             }
@@ -91,7 +104,104 @@ class ControlActivity: AppCompatActivity(){
             true
         }*/
         control_disconnect.setOnClickListener{ disconnect() }
+
+         */
     }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun buttonPress() {
+        imageButton.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    mRunnable = Runnable {
+                        Toast.makeText(this, "Apretaste el botón", Toast.LENGTH_SHORT).show()
+                        sendCommand("1")
+                        mHandler.postDelayed(mRunnable, 100)
+                    }
+                    mHandler.postDelayed(mRunnable, 0)
+                    true
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    Toast.makeText(this, "Dejaste de apretar el botón", Toast.LENGTH_SHORT).show()
+                    mHandler.removeCallbacks(mRunnable)
+                    true
+                }
+                else -> true
+            }
+
+        }
+
+        imageButton2.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    mRunnable = Runnable {
+                        Toast.makeText(this, "Apretaste el botón", Toast.LENGTH_SHORT).show()
+                        sendCommand("2")
+                        mHandler.postDelayed(mRunnable, 100)
+                    }
+                    mHandler.postDelayed(mRunnable, 0)
+                    true
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    Toast.makeText(this, "Dejaste de apretar el botón", Toast.LENGTH_SHORT).show()
+                    mHandler.removeCallbacks(mRunnable)
+                    true
+                }
+                else -> true
+            }
+
+        }
+
+        imageButton3.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    mRunnable = Runnable {
+                        Toast.makeText(this, "Apretaste el botón", Toast.LENGTH_SHORT).show()
+                        sendCommand("3")
+                        mHandler.postDelayed(mRunnable, 100)
+                    }
+                    mHandler.postDelayed(mRunnable, 0)
+                    true
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    Toast.makeText(this, "Dejaste de apretar el botón", Toast.LENGTH_SHORT).show()
+                    mHandler.removeCallbacks(mRunnable)
+                    true
+                }
+                else -> true
+            }
+
+        }
+
+        imageButton4.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    mRunnable = Runnable {
+                        Toast.makeText(this, "Apretaste el botón", Toast.LENGTH_SHORT).show()
+                        sendCommand("0")
+                        mHandler.postDelayed(mRunnable, 100)
+                    }
+                    mHandler.postDelayed(mRunnable, 0)
+                    true
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    Toast.makeText(this, "Dejaste de apretar el botón", Toast.LENGTH_SHORT).show()
+                    mHandler.removeCallbacks(mRunnable)
+                    true
+                }
+                else -> true
+            }
+
+        }
+
+        control_disconnect.setOnClickListener{ disconnect() }
+
+    }
+
     private fun sendCommand(input: String){
         if (m_bluetoothSocket != null){
             try {
